@@ -1,10 +1,10 @@
 // input.js
-let keys = {};
+const Keys = {};
 
-document.addEventListener('keydown', (e) => {
-    keys[e.key] = true;
+window.addEventListener('keydown', (e) => {
+  Keys[e.key] = true;
 });
 
-document.addEventListener('keyup', (e) => {
-    keys[e.key] = false;
+window.addEventListener('keyup', (e) => {
+  Keys[e.key] = false;
 });
