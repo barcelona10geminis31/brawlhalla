@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brawlhalla Recreated</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brawlhalla Clone Mejorado</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-    <div class="game-container">
-        <h1>Brawlhalla (Recreado)</h1>
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        <div id="game-over" class="hidden">
-            <h2>¡Juego Terminado!</h2>
-            <button onclick="resetGame()">Volver a jugar</button>
-        </div>
+  <div class="game-container">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="ui-overlay">
+      <div id="hud">
+        <span id="player1-life">Player1: 100%</span>
+        <span id="player2-life">Player2: 100%</span>
+      </div>
+      <div id="menu-screen" class="overlay hidden">
+        <h1>Bienvenido</h1>
+        <button id="btn-start">Empezar</button>
+      </div>
+      <div id="pause-screen" class="overlay hidden">
+        <h1>Pausado</h1>
+        <button id="btn-resume">Continuar</button>
+      </div>
+      <div id="gameover-screen" class="overlay hidden">
+        <h1>Juego Terminado</h1>
+        <button id="btn-restart">Volver a Jugar</button>
+      </div>
     </div>
-    <script src="js/input.js"></script>
-    <script src="js/physics.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/game.js"></script>
+  </div>
+
+  <script src="js/loader.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/physics.js"></script>
+  <script src="js/sprite.js"></script>
+  <script src="js/player.js"></script>
+  <script src("js/ui.js"></script>
+  <script src="js/game.js"></script>
 </body>
 </html>
