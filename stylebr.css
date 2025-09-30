@@ -1,53 +1,85 @@
-/* style.css */
+/* Reset básico */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #282c34;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    flex-direction: column;
+  background-color: #111;
+  color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Arial, sans-serif;
 }
 
 .game-container {
-    text-align: center;
+  position: relative;
 }
 
+/* Canvas */
 canvas {
-    border: 2px solid #fff;
-    margin-top: 20px;
-    background-image: url('../assets/images/background.jpg');
-    background-size: cover;
+  border: 2px solid #555;
+  background-color: #000;
 }
 
-#game-over {
-    display: none;
-    color: white;
-    font-size: 24px;
-    margin-top: 20px;
+/* UI Overlay */
+#ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* para que los clics pasen al canvas si es necesario */
+}
+
+#hud {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 18px;
+}
+
+/* Pantallas de menú, pausa, game over */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(20, 20, 20, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  pointer-events: auto; /* para que botones respondan */
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
-button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+.overlay h1 {
+  margin-bottom: 20px;
+  font-size: 36px;
+  color: #fff;
 }
 
-button:hover {
-    background-color: #45a049;
+.overlay button {
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  border: none;
+  background: #28a745;
+  color: white;
+  border-radius: 5px;
+}
+
+.overlay button:hover {
+  background: #218838;
 }
