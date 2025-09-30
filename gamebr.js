@@ -1,53 +1,101 @@
 // game.js
+const Game = {
+  canvas: null,
+  ctx: null,
+  lastTime: 0,
+  player1: null,
+  player2: null,
+  platforms: [],
+  running: false,
 
-// Configuración del lienzo y contexto
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+  init() {
+    this.canvas = document.getElementById('gameCanvas');
+    this.ctx = this.canvas.getContext('2d');
 
-// Cargar sonidos
-const jumpSound = new Audio('assets/sounds/jump.mp3');
-const punchSound = new Audio('assets/sounds/punch.mp3');
-const backgroundMusic = new Audio('assets/sounds/background-music.mp3');
-backgroundMusic.loop = true;
-backgroundMusic.play();
+    // plataformas de ejemplo
+    this.platforms = [
+      { x: 0, y: 550, width: 800, height: 50 },
+      { x: 150, y: 400, width: 200, height: 20 },
+      { x: 450, y: 300, width: 200, height: 20 }
+    ];
 
-// Jugadores
-let player1 = new Player(100, 500, 'red', 'player1.png');
-let player2 = new Player(600, 500, 'blue', 'player2.png');
+    this.player1 = new Player(100, 100, 'player1');
+    this.player2 = new Player(600, 100, 'player2');
 
-// Actualización del juego
-function update() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas
+    UI.showMenu();
+  },
 
-    // Actualizar jugadores
-    player1.update();
-    player2.update();
+  start() {
+    this.running = true;
+    this.lastTime = performance.now();
+    this.loop();
+    Assets.sounds['bgm'].loop = true;
+    Assets.sounds['bgm'].play();
+  },
 
-    // Verificar colisiones o condiciones de "game over"
-    checkGameOver();
+  resume() {
+    this.running = true;
+    this.lastTime = performance.now();
+    this.loop();
+    Assets.sounds['bgm'].play();
+  },
 
-    // Dibujar jugadores
-    player1.draw(ctx);
-    player2.draw(ctx);
+  restart() {
+    // reiniciar posiciones y vida
+    this.player1 = new Player(100, 100, 'player1');
+    this.player2 = new Player(600, 100, 'player2');
+    UI.hideGameOver();
+    this.start();
+  },
 
-    requestAnimationFrame(update); // Animación continua
-}
-
-function checkGameOver() {
-    if (player1.y > canvas.height || player2.y > canvas.height) {
-        document.getElementById('game-over').style.display = 'block';
-        backgroundMusic.pause();
+  loop() {
+    if (!this.running) {
+      return;
     }
-}
+    const now = performance.now();
+    const deltaTime = (now - this.lastTime) / 1000; // en segundos
+    this.lastTime = now;
 
-// Reiniciar juego
-function resetGame() {
-    document.getElementById('game-over').style.display = 'none';
-    player1.reset(100, 500);
-    player2.reset(600, 500);
-    backgroundMusic.play();
-    update();
-}
+    this.update(deltaTime);
+    this.draw();
 
-// Iniciar el juego
-update();
+    requestAnimationFrame(() => this.loop());
+  },
+
+  update(dt) {
+    this.player1.update(dt, this.platforms);
+    this.player2.update(dt, this.platforms);
+
+    // ejemplo simple de “game over”: si alguno baja demasiado
+    if (this.player1.y > 600 || this.player2.y > 600) {
+      this.running = false;
+      UI.showGameOver();
+      Assets.sounds['bgm'].pause();
+    }
+
+    UI.updateHUD(this.player1, this.player2);
+  },
+
+  draw() {
+    // dibujar fondo
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.drawImage(Assets.images['background'], 0, 0, this.canvas.width, this.canvas.height);
+
+    // dibujar plataformas
+    this.ctx.fillStyle = '#444';
+    for (let plat of this.platforms) {
+      this.ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
+    }
+
+    // dibujar jugadores
+    this.player1.draw(this.ctx);
+    this.player2.draw(this.ctx);
+  }
+};
+
+// Cargar assets y luego inicializar
+loadAllAssets().then(() => {
+  Game.init();
+}).catch(err => {
+  console.error("Error cargando assets:", err);
+});
